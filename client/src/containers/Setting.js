@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { Card, Button, Popconfirm, message } from "antd";
 import {
   ArrowRightOutlined,
@@ -18,6 +19,10 @@ import {
   asyncGetExpenses,
   asyncMultipleDelete,
 } from "../actions/expenseAction";
+
+// FROM STYLES
+import "./../styles/general.css";
+import "./../styles/Setting.css";
 
 const Setting = (props) => {
   const dispatch = useDispatch();
@@ -68,98 +73,116 @@ const Setting = (props) => {
   };
 
   return (
-    <>
-      {/* {budget.isLoading ? (
-        <center style={{ paddingTop: 170, paddingLeft: 0 }}>
-          <Spin size="large" />
-        </center>
-      ) : ( */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "70fr 30fr",
-          marginTop: "70px",
-        }}
-      >
-        <div style={{ justifySelf: "center" }}>
-          <Card hoverable={true} className="cards">
-            <h1>
-              Total Budget-{budget.data.amount}Rs
-              <LikeFilled style={{ color: "darkblue" }} />
-            </h1>
-            {toggle ? (
-              <>
-                <form>
-                  <label style={{ fontWeight: "bold" }}>Total Budget:</label>
-                  <input
-                    type="text"
-                    placeholder={budget.data.amount}
-                    value={budgetValue}
-                    onChange={handleChange}
-                  />
-                  <br />
-                  <Button
-                    onClick={handleSubmit}
-                    className="button-two"
-                    type="primary"
-                  >
-                    save
-                  </Button>
-                </form>
-              </>
-            ) : (
-              <>
-                <p style={{ color: "darkgreen" }}>
-                  <ArrowRightOutlined />
-                  Here click the update button to update your budget value
-                </p>
-                <Button
-                  className="button-two"
-                  onClick={() => {
-                    setToggle(true);
-                  }}
-                >
-                  update
-                </Button>
-              </>
-            )}
-          </Card>
-          <Category />
-        </div>
-
+    <div className="container">
+      <div className="back-link">
+        <Link className="nav-link" to="/home">
+          &larr; Back
+        </Link>
+      </div>
+      <div>
         <div>
-          {category.data.length > 0 && (
-            <ul>
-              <h2>Categories list</h2>
-              <hr />
-              {category.data.map((category) => {
-                return (
-                  <div key={category._id} style={{ wordSpacing: "1em" }}>
-                    <p key={category._id}>
-                      <CheckCircleFilled style={{ color: "green" }} />
-                      {category.name}
-                      <Popconfirm
-                        title="Delete the Category"
-                        description="Are you sure to delete this category and expenses under this category?"
-                        onConfirm={() => {
-                          confirm(category._id);
-                        }}
-                        onCancel={cancel}
-                        okText="Yes"
-                        cancelText="No"
-                      >
-                        <DeleteFilled style={{ color: "black" }} />
-                      </Popconfirm>
-                    </p>
-                  </div>
-                );
-              })}
-            </ul>
-          )}
+          <div className="budget-container">
+            <Card hoverable={true} className="cards">
+              <h1>
+                Total Budget-{budget.data.amount}Rs
+                <LikeFilled style={{ color: "darkblue" }} />
+              </h1>
+              {toggle ? (
+                <>
+                  <form>
+                    <label style={{ fontWeight: "bold" }}>Total Budget:</label>
+                    <input
+                      type="text"
+                      placeholder={budget.data.amount}
+                      value={budgetValue}
+                      onChange={handleChange}
+                    />
+                    <br />
+                    <Button
+                      onClick={handleSubmit}
+                      className="button-two"
+                      type="primary"
+                    >
+                      save
+                    </Button>
+                  </form>
+                </>
+              ) : (
+                <>
+                  <p style={{ color: "darkgreen" }}>
+                    <ArrowRightOutlined />
+                    Here click the update button to update your budget value
+                  </p>
+                  <Button
+                    className="button-two"
+                    onClick={() => {
+                      setToggle(true);
+                    }}
+                  >
+                    update
+                  </Button>
+                </>
+              )}
+            </Card>
+            <Category />
+          </div>
         </div>
       </div>
-      {/* )} */}
-    </>
+
+      <div>
+        <div className="main-category">
+          <div>
+            {category.data.length > 0 && (
+              <>
+                <h2 className="primary-heading" style={{ color: "black" }}>
+                  Categories list
+                </h2>
+                <ul className="category-container">
+                  {category.data.map((category) => {
+                    return (
+                      <div
+                        key={category._id}
+                        style={{
+                          wordSpacing: "1em",
+                        }}
+                      >
+                        <div>
+                          <p
+                            key={category._id}
+                            style={{ marginBottom: "1rem" }}
+                          >
+                            <CheckCircleFilled
+                              style={{ color: "green", marginRight: "0.6rem" }}
+                            />
+                            <strong style={{ fontSize: "1.2rem" }}>
+                              {category.name}
+                            </strong>
+                            <Popconfirm
+                              title="Delete the Category"
+                              description="Are you sure to delete this category and expenses under this category?"
+                              onConfirm={() => {
+                                confirm(category._id);
+                              }}
+                              onCancel={cancel}
+                              okText="Yes"
+                              cancelText="No"
+                            >
+                              <DeleteFilled
+                                style={{ color: "black", marginLeft: "0.6rem" }}
+                              />
+                            </Popconfirm>
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </ul>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

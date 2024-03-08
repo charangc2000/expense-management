@@ -28,15 +28,12 @@ const DonutChart = (props) => {
       <Chart
         type="donut"
         width={400}
-        height={200}
+        height={300}
         series={data}
         options={options}
       />
       <p>
-        Total Budget-
-        <span style={{ fontSize: 20, fontWeight: "bold" }}>
-          {budget.data.amount}
-        </span>
+        Total Budget-<strong>{budget.data.amount}</strong>
         Rs
       </p>
     </div>

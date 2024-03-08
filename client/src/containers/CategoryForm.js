@@ -3,6 +3,8 @@ import { useDispatch } from "react-redux";
 import { asyncSetCategory } from "../actions/categoryAction.js";
 import { Button } from "antd";
 
+import "./../styles/FormInput.css";
+
 const CategoryForm = (props) => {
   const dispatch = useDispatch();
 
@@ -24,8 +26,9 @@ const CategoryForm = (props) => {
 
   return (
     <div className="formThree">
-      <br />
-      <label style={{ fontWeight: "bold" }}>Categories:</label>
+      <h2 style={{ fontWeight: "bold", marginBottom: "0.2rem" }}>
+        Categories:
+      </h2>
       <div>
         <input
           type="text"

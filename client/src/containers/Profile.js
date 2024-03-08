@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import Swal from "sweetalert2";
+import { Link, useNavigate } from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Modal, Image } from "antd";
 import { useSelector, useDispatch } from "react-redux";
@@ -7,7 +9,11 @@ import {
   asyncUpdateImage,
   asyncGetImage,
 } from "../actions/imageAction";
-import "../App.css";
+import { removeAccount } from "../actions/userAction";
+
+//FROM STYLES
+import "./../styles/general.css";
+import "./../styles/Profile.css";
 
 const Profile = (props) => {
   const { user, profile } = useSelector((state) => {
@@ -15,6 +21,7 @@ const Profile = (props) => {
   });
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(asyncGetImage());
@@ -53,43 +60,80 @@ const Profile = (props) => {
   };
 
   return (
-    <center className="profile">
-      <h2>Account Information</h2>
-      {Object.keys(profile).length > 0 ? (
-        <Image
-          width={100}
-          src={`http://localhost:3333/profile/${profile.image}`}
-        />
-      ) : (
-        <Avatar size={100} icon={<UserOutlined />} />
-      )}
-      <p>
-        Name:<span className="font-style">{user.username}</span>
-      </p>
-      <p>
-        Email:<span className="font-style">{user.email}</span>
-      </p>
-      <p>
-        Timing Of Creation:<span className="font-style">{user.createdAt}</span>
-      </p>
-      {Object.keys(profile).length > 0 ? (
-        <Button size="small" className="button-two" onClick={handleUpdateClick}>
-          Update Profile
-        </Button>
-      ) : (
-        <Button size="small" className="button-two" onClick={handleAddClick}>
-          Add Profile
-        </Button>
-      )}
-      <Modal
-        title="Profile-Information"
-        open={open}
-        onOk={onOk}
-        onCancel={onCancel}
-      >
-        <input type="file" name="file" onChange={handleFileChange} />
-      </Modal>
-    </center>
+    <div className="container main-container">
+      <div className="back-link">
+        <Link className="nav-link" to="/home">
+          &larr; Back
+        </Link>
+      </div>
+      <div className="profile-container">
+        <div>
+          <div className="profile-text">
+            <h2 className="main-heading">Account Information</h2>
+            {Object.keys(profile).length > 0 ? (
+              <Image
+                className="profile-img"
+                width={400}
+                src={`http://localhost:3333/profile/${profile.image}`}
+              />
+            ) : (
+              <Avatar size={200} icon={<UserOutlined />} />
+            )}
+            <p>
+              <strong>Name:</strong>
+              {user.username}
+            </p>
+            <p>
+              <strong>Email:</strong>
+              {user.email}
+            </p>
+            <p>
+              <strong>Time of Creation:</strong>
+              {user.createdAt}
+            </p>
+            <div className="setting-btn">
+              {Object.keys(profile).length > 0 ? (
+                <Button
+                  size="small"
+                  className="button-two"
+                  onClick={handleUpdateClick}
+                >
+                  Update Profile
+                </Button>
+              ) : (
+                <Button
+                  size="small"
+                  className="button-two"
+                  onClick={handleAddClick}
+                >
+                  Add Profile
+                </Button>
+              )}
+              <Button
+                size="small"
+                className="button-two"
+                onClick={() => {
+                  Swal.fire("you successfully loggedOut...!!!");
+                  dispatch(removeAccount());
+                  localStorage.removeItem("token");
+                  navigate("/");
+                }}
+              >
+                Sign-Out
+              </Button>
+            </div>
+          </div>
+          <Modal
+            title="Profile-Information"
+            open={open}
+            onOk={onOk}
+            onCancel={onCancel}
+          >
+            <input type="file" name="file" onChange={handleFileChange} />
+          </Modal>
+        </div>
+      </div>
+    </div>
   );
 };
 

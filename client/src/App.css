@@ -1,4 +1,4 @@
-.App {
+/* .App {
   display: flex;
   flex-direction: column;
   width: 100vw;
@@ -134,3 +134,10 @@ hr {
   border: 3px solid rgb(186, 183, 179);
   border-radius: 5px;
 }
+
+/* for profile IMAGE */
+/* .profile-img {
+  height: 50px;
+  width: 50px;
+  border-radius: 100%;
+} */

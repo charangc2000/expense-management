@@ -18,6 +18,10 @@ import PieChart from "./PieChart";
 import "../App.css";
 import Warning from "./Warning";
 
+//FROM STYLES
+import "./../styles/general.css";
+import "./../styles/Home.css";
+
 const Home = (props) => {
   const { category, expenses, budget } = useSelector((state) => {
     return state;
@@ -37,6 +41,10 @@ const Home = (props) => {
   const [select, setSelect] = useState("");
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    dispatch(asyncGetExpenses());
+  }, [dispatch]);
 
   const handleChange = (e) => {
     const text = e.target.name;
@@ -88,10 +96,6 @@ const Home = (props) => {
         .includes(search.toLocaleLowerCase());
     });
   };
-
-  useEffect(() => {
-    dispatch(asyncGetExpenses());
-  }, [dispatch]);
 
   const columns = [
     { title: "Category", dataIndex: "category", key: "category" },
@@ -161,7 +165,6 @@ const Home = (props) => {
     };
     if (id === "") {
       dispatch(asyncSetExpenses(formData));
-      //console.log(formData);
     } else {
       dispatch(asyncUpdateExpenses(id, formData));
     }
@@ -175,15 +178,19 @@ const Home = (props) => {
     setSearch(e.target.value);
   };
   return (
-    <div>
-      <div className="add-charts">
-        <DonutChart />
-        <PieChart />
+    <div className="container">
+      <div className="chart-container">
+        <div className="add-charts">
+          <DonutChart />
+          <PieChart />
+        </div>
+      </div>
+      <div className="warning-show">
         {totalAmount > budget.data.amount && <Warning />}
       </div>
-      <div className="add-button">
+      <div className="main-btn">
         <Button
-          className="button"
+          className="add-btn"
           onClick={() => {
             setName("");
             setAmount("");
@@ -193,10 +200,10 @@ const Home = (props) => {
             setIsModalOpen(true);
           }}
         >
-          AddExpenses
+          AddExpenses &rarr;
         </Button>
         <input
-          style={{ borderRadius: 10 }}
+          className="search-form"
           type="search"
           value={search}
           placeholder="search on category...."
@@ -211,61 +218,62 @@ const Home = (props) => {
           onCancel={handleCancel}
         >
           <div>
-            <form>
-              <label className="font-style">name:</label>
-              <input
-                className="input-type"
-                type="text"
-                value={name}
-                name="expenseName"
-                onChange={handleChange}
-              />
-              <br />
-              <label className="font-style">amount:</label>
-              <input
-                className="input-type"
-                type="text"
-                value={amount}
-                name="expenseAmount"
-                onChange={handleChange}
-              />
-              <br />
-              <label className="font-style">description:</label>
-              <textarea
-                className="input-type"
-                value={description}
-                name="expenseDescription"
-                onChange={handleChange}
-              ></textarea>
-              <br />
-              <label className="font-style">ExpenseDate:</label>
-              <input
-                className="input-type"
-                type="date"
-                value={date}
-                onChange={handleChange}
-                name="expenseDate"
-              />
-              <br />
-              <label className="font-style">category:</label>
-              <select
-                className="input-type"
-                onChange={handleChange}
-                name="selectName"
-                defaultValue={select} // initial value
-                value={select} // set value
-              >
-                <option value="select">select</option>
-                {category.data.map((category) => {
-                  return <option key={category._id}>{category.name}</option>;
-                })}
-              </select>
-              <br />
+            <form className="expense-form">
+              <div>
+                <label className="expense-label">name:</label>
+                <input
+                  className="input-type"
+                  type="text"
+                  value={name}
+                  name="expenseName"
+                  onChange={handleChange}
+                />
+              </div>
+              <div>
+                <label className="expense-label">amount:</label>
+                <input
+                  type="text"
+                  value={amount}
+                  name="expenseAmount"
+                  onChange={handleChange}
+                />
+              </div>
+              <div>
+                <label className="expense-label">description:</label>
+                <textarea
+                  value={description}
+                  name="expenseDescription"
+                  onChange={handleChange}
+                ></textarea>
+              </div>
+              <div>
+                <label className="expense-label">ExpenseDate:</label>
+                <input
+                  type="date"
+                  value={date}
+                  onChange={handleChange}
+                  name="expenseDate"
+                />
+              </div>
+              <div>
+                <label className="expense-label">category:</label>
+                <select
+                  onChange={handleChange}
+                  name="selectName"
+                  defaultValue={select} // initial value
+                  value={select} // set value
+                >
+                  <option value="select">select</option>
+                  {category.data.map((category) => {
+                    return <option key={category._id}>{category.name}</option>;
+                  })}
+                </select>
+              </div>
             </form>
           </div>
         </Modal>
       </div>
-      <div className="table">
+      <div className="data-table">
         {expenses.data.length > 0 && (
           <Table
             ref={componentRef}

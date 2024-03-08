@@ -14,6 +14,9 @@ import { removeAccount } from "../actions/userAction";
 import { asyncDeleteData, asyncGetExpenses } from "../actions/expenseAction";
 import DeletedExpense from "./DeletedExpense";
 
+//STYLE
+import "../styles/appheader.css";
+
 const AppHeader = () => {
   const { user } = useSelector((state) => {
     return state;
